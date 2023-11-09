@@ -3,7 +3,7 @@ import { supabase } from '../../client'
 import { useParams, Link } from 'react-router-dom';
 
 
-const ViewPost = ({ posts }) => {
+const ViewPost = () => {
     const { id } = useParams();
 
     const [post, setPost] = useState(null);
