@@ -6,30 +6,50 @@ import { useParams, Link } from 'react-router-dom';
 const ViewPost = ({ posts }) => {
     const { id } = useParams();
 
-    // If post is initialized as {}, then post.title, post.author, and post.description will all be undefined, but they won't cause the program to crash.
-    const [post, setPost] = useState({});
-
+    const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchedPost = posts.find(item => item.id.toString() === id);
-        // const fetchedPost = posts.filter(item => item.id.toString() === id)[0];
-        //  finds the first post in posts where item.id is strictly equal to id and assigns that to fetchedPost
-        setPost(fetchedPost);
-    }, [posts, id]);
-    // Anytime posts or id changes, useEffect will run again.
+        const fetchPost = async () => {
+            try {
+                setLoading(true);
+                const { data, error } = await supabase
+                    .from('Posts')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
 
+                if (error) throw error;
+                setPost({
+                    id: data.id,
+                    title: data.title || '',
+                    description: data.description || '',
+                    image: data.image || '',
+                    category: data.category || '',
+                });
+            } catch (error) {
+                setError('An error occurred while fetching the post.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPost();
+    }, [id]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!post) return <div>Post not found.</div>;
 
     return (
-        post ? (
-            <div>
-                <img src={post.image} alt={post.title} />
-                <h2>{post.title}</h2>
-                <p>{post.description}</p>
-                <p> comment </p>
-                <Link to={`/edit/${post.id}`}><button>Edit</button></Link>
-                <br />
-            </div >
-        ) : <div>Loading...</div>
+        <div>
+            <img src={post.image} alt={post.title} />
+            <h2>{post.title}</h2>
+            <p>{post.description}</p>
+            <p> comment </p>
+            <Link to={`/edit/${post.id}`}><button>Edit</button></Link>
+            <br />
+        </div >
     );
 };
 
