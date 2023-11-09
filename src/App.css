@@ -1,0 +1,67 @@
+#root {
+  max-width: 100%; /* Start with 100% for mobile */
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  color: black;
+  background-color: white;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh; 
+}
+
+
+.card-container {
+  display: flex;
+  flex-flow: column wrap;
+  /* Stack cards vertically for mobile */
+  align-items: center;
+  justify-content: center;
+  /* Adjust for mobile */
+}
+
+.card {
+  color: #000;
+  background-color: #fff;
+  padding-bottom: 20px;
+  box-shadow: 0 15px 25px #817c7c33;
+  border-radius: 14px;
+  backdrop-filter: blur(2px);
+  text-align: center;
+  width: 90%; /* Take up most of the screen width on mobile */
+  margin: 10px auto; /* Center the cards on mobile */
+}
+
+.card img {
+  width: 300px; 
+  height: 100%;
+  object-fit: cover
+}
+
+
+/* Media Query for Tablets and Desktops */
+@media (min-width: 768px) {
+  #root {
+    max-width: 1280px; /* Set a max-width for larger screens */
+  }
+
+  h1 {
+    font-size: 60px;
+    margin-left: 50px;
+  }
+
+  .card-container {
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
+
+  .card {
+    width: 300px; /* Fixed width for cards on larger screens */
+  }
+}
