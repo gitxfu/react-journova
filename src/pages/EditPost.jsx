@@ -21,8 +21,6 @@ const EditPost = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-
-
     useEffect(() => {
         const fetchPost = async () => {
             const { data, error } = await supabase
@@ -42,6 +40,8 @@ const EditPost = () => {
                     secretKey: ''
                 });
                 setOriginalSecretKey(data.secret_key);
+            } else {
+                setFeedback('Post not found.');
             }
         };
         fetchPost();
@@ -88,6 +88,11 @@ const EditPost = () => {
     const deletePost = async (event) => {
         event.preventDefault();
 
+        if (!post.id) {
+            setFeedback('No post to delete.');
+            return;
+        }
+
         // Check if the entered secret key matches the original one
         if (post.secretKey !== originalSecretKey) {
             setFeedback('Incorrect secret key. You are not authorized to delete this post.');
@@ -118,7 +123,6 @@ const EditPost = () => {
             <div className='form-container'>
                 <PostForm data={post} onChange={handleInputChange} onSubmit={updatePost} />
                 <button className="deleteButton" onClick={deletePost}>Delete</button>
-
             </div>
 
             {feedback && <p>{feedback}</p>}
