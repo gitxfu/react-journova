@@ -4,7 +4,7 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
     return (
         <form onSubmit={onSubmit}>
             <label htmlFor="title">Title</label> <br />
-            <input type="text" id="title" name="title" value={data.title} onChange={onChange} required/><br />
+            <input type="text" id="title" name="title" value={data.title} onChange={onChange} required /><br />
             <br />
 
             <label htmlFor="description">Description</label><br />
@@ -13,7 +13,7 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
             <br />
 
             <label htmlFor="image">Image</label><br />
-            <input type="text" id="image" name="image" value={data.image} onChange={onChange} required/><br />
+            <input type="text" id="image" name="image" value={data.image} onChange={onChange} required /><br />
             <br />
 
             <div className="mini-container">
@@ -35,10 +35,10 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
             </div>
 
             <label htmlFor="secretKey">Secret Key</label><br />
-            <input type="text" id="secretKey" name="secretKey" value={data.secretKey} onChange={onChange} required/><br />
+            <input type="text" id="secretKey" name="secretKey" value={data.secretKey} onChange={onChange} required /><br />
             <br />
 
-            <input type="submit" value="Save" disabled={!!error}/>
+            <input type="submit" value="Save" disabled={!!error} />
         </form>
     )
 

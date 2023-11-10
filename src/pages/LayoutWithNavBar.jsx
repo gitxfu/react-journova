@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
-import NavBar from './NavBar';
+import NavBar from '../components/NavBar';
 
-const LayoutWithNavBar = () => (
+const LayoutWithNavBar = ({ userID, setUserID }) => (
   <>
-    <NavBar />
+    <NavBar userID={userID} setUserID={setUserID} />
     <Outlet /> {/* This is where nested routes will be rendered */}
   </>
 );

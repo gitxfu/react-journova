@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { supabase } from '../../client'
 import PostForm from '../components/PostForm';
-
-const CreatePost = () => {
+import { useNavigate } from 'react-router-dom';
+const CreatePost = ({ userID }) => {
 
     const [feedback, setFeedback] = useState('');
     const [post, setPost] = useState({
+        userId: userID,
         title: '',
         description: '',
         image: '',
         category: '',
-        userId: '',
         secretKey: '',
     });
+
+    const navigate = useNavigate();
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -39,10 +41,10 @@ const CreatePost = () => {
         } else {
             setFeedback('Post created successfully!');
             setPost({ title: '', description: '', image: '', category: '', secretKey: '' }); // Reset the form
-            console.log('Insert:', data);
+            // console.log('Insert:', data);
             // Redirect after 2 seconds
             setTimeout(() => {
-                window.location = "/";
+                navigate('/');
             }, 2000); // 2000 milliseconds = 2 seconds
         }
 

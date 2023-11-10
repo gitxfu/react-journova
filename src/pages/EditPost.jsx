@@ -3,7 +3,6 @@ import { supabase } from '../../client'
 import { useParams, useNavigate } from 'react-router-dom';
 import PostForm from '../components/PostForm';
 
-
 const EditPost = () => {
 
     const [feedback, setFeedback] = useState('');
