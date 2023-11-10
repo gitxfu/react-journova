@@ -29,7 +29,7 @@ const Card = ({ id, likeCount, timeAgo, image, title }) => {
 
     return (
         <div className="card">
-            <p className="timeAgo">Posted {timeAgo} ago</p>
+            <p className="timeAgo">Posted {timeAgo}</p>
             <Link to={`/view/${id}`}>
                 <img src={image} alt={title} />
             </Link>
