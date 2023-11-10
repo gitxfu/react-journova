@@ -7,6 +7,8 @@ import PostForm from '../components/PostForm';
 const EditPost = () => {
 
     const [feedback, setFeedback] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const [post, setPost] = useState({
         title: '',
@@ -23,16 +25,17 @@ const EditPost = () => {
 
     useEffect(() => {
         const fetchPost = async () => {
-            const { data, error } = await supabase
-                .from('Posts')
-                .select('*')
-                .eq('id', id)
-                .single();
+            try {
+                setLoading(true);
+                const { data, error } = await supabase
+                    .from('Posts')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
 
-            if (error) {
-                setFeedback('Error feteching post: ' + error.message);
-            } else if (data) {
+                if (error) throw error;
                 setPost({
+                    id: data.id,
                     title: data.title || '',
                     description: data.description || '',
                     image: data.image || '',
@@ -40,8 +43,11 @@ const EditPost = () => {
                     secretKey: ''
                 });
                 setOriginalSecretKey(data.secret_key);
-            } else {
-                setFeedback('Post not found.');
+            } catch (error) {
+                setError('An error occurred while fetching the post.');
+                console.error;
+            } finally {
+                setLoading(false);
             }
         };
         fetchPost();
@@ -72,7 +78,7 @@ const EditPost = () => {
             .eq('id', id);
 
         if (error) {
-            setFeedback('Error updating post: ' + error.message);
+            setError('An error occurred while fetching the post.');
             console.error('Error updating:', error);
         } else {
             setFeedback('Post updated successfully!');
@@ -88,11 +94,6 @@ const EditPost = () => {
     const deletePost = async (event) => {
         event.preventDefault();
 
-        if (!post.id) {
-            setFeedback('No post to delete.');
-            return;
-        }
-
         // Check if the entered secret key matches the original one
         if (post.secretKey !== originalSecretKey) {
             setFeedback('Incorrect secret key. You are not authorized to delete this post.');
@@ -105,7 +106,7 @@ const EditPost = () => {
             .eq('id', id);
 
         if (error) {
-            setFeedback('Error deleting a post: ' + error.message);
+            setError('An error occurred while deleting the post.');
             console.error('Error deleting:', error);
         } else {
             setFeedback('Post deleted successfully!');
@@ -116,16 +117,19 @@ const EditPost = () => {
         }
     };
 
+    if (loading) return <div>Loading...</div>;
 
     return (
         <div>
             <h1> Edit post </h1>
             <div className='form-container'>
-                <PostForm data={post} onChange={handleInputChange} onSubmit={updatePost} />
-                <button className="deleteButton" onClick={deletePost}>Delete</button>
+                <PostForm data={post} onChange={handleInputChange} onSubmit={updatePost} error={error} />
+                <button className="deleteButton" onClick={deletePost} disabled={!!error}>Delete</button>
             </div>
 
-            {feedback && <p>{feedback}</p>}
+
+            {error && <p className="error-message">{error}</p>}
+            {feedback && <p className="feedback-message">{feedback}</p>}
         </div>
     )
 

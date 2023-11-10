@@ -30,6 +30,7 @@ const ViewPost = () => {
                 });
             } catch (error) {
                 setError('An error occurred while fetching the post.');
+                console.error;
             } finally {
                 setLoading(false);
             }

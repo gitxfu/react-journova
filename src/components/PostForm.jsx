@@ -1,4 +1,4 @@
-const PostForm = ({ data, onChange, onSubmit }) => {
+const PostForm = ({ data, onChange, onSubmit, error }) => {
     const CATEGORIES = ['Blog', 'Question'];
 
     return (
@@ -38,7 +38,7 @@ const PostForm = ({ data, onChange, onSubmit }) => {
             <input type="text" id="secretKey" name="secretKey" value={data.secretKey} onChange={onChange} required/><br />
             <br />
 
-            <input type="submit" value="Save" />
+            <input type="submit" value="Save" disabled={!!error}/>
         </form>
     )
 
