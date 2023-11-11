@@ -7,6 +7,7 @@ const ViewPost = () => {
     const { id } = useParams();
 
     const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -35,24 +36,38 @@ const ViewPost = () => {
         const fetchPost = async () => {
             try {
                 setLoading(true);
-                const { data, error } = await supabase
+                // Fetch the post
+                const { data: postData, error: postError } = await supabase
                     .from('Posts')
                     .select('*')
                     .eq('id', id)
                     .single();
 
-                if (error) throw error;
+                if (postError) throw postError;
+
                 setPost({
-                    id: data.id,
-                    title: data.title || '',
-                    description: data.description || '',
-                    image: data.image || '',
-                    category: data.category || '',
-                    likeCount: data.like_count || 0,
+                    id: postData.id,
+                    title: postData.title || '',
+                    description: postData.description || '',
+                    image: postData.image || '',
+                    category: postData.category || '',
+                    likeCount: postData.like_count || 0,
                 });
+
+                // Comments should only be fetched after successfully fetching the post
+                const { data: commentsData, error: commentsError } = await supabase
+                    .from('Comments')
+                    .select('*')
+                    .eq('post_id', id)
+                    .order('created_at', { ascending: true });
+
+                console.log(commentsData)
+
+                if (commentsError) throw commentsError;
+                setComments(commentsData);
             } catch (error) {
                 setError('An error occurred while fetching the post.');
-                console.error;
+                console.error('Error fetching:', error);
             } finally {
                 setLoading(false);
             }
@@ -72,8 +87,21 @@ const ViewPost = () => {
             </button>
             <h2>{post.title}</h2>
             <p>{post.description}</p>
-            <p> comment </p>
             <Link to={`/edit/${post.id}`}><button>Edit</button></Link>
+
+            <div className="comments-section">
+                {console.log(comments)}
+                {comments.map(comment => (
+                    <div key={comment.comment_id} className="comment">
+                        <p>{comment.comment_text}</p>
+                        <span>Posted by: {comment.user_id}</span>
+                        <span>Likes: {comment.like_count}</span>
+                    </div>
+
+                )
+                )}
+
+            </div>
             <br />
         </div >
     );
