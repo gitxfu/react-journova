@@ -9,6 +9,27 @@ const ViewPost = () => {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isUpdating, setIsUpdating] = useState(false);
+
+    const updateCount = async () => {
+        setIsUpdating(true);
+
+        const newCount = post.likeCount + 1;
+        setPost((prev) => ({ ...prev, likeCount: newCount }));
+
+        const { error } = await supabase
+            .from('Posts')
+            .update({ like_count: newCount })
+            .eq('id', id)
+
+        if (error) {
+            console.error('Error updating like count:', error);
+            // Revert to the old count on error
+            setPost((prev) => ({ ...prev, likeCount: post.likeCount }));
+        }
+
+        setIsUpdating(false);
+    }
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -27,6 +48,7 @@ const ViewPost = () => {
                     description: data.description || '',
                     image: data.image || '',
                     category: data.category || '',
+                    likeCount: data.like_count || 0,
                 });
             } catch (error) {
                 setError('An error occurred while fetching the post.');
@@ -45,6 +67,9 @@ const ViewPost = () => {
     return (
         <div>
             <img src={post.image} alt={post.title} />
+            <button className="likeButton" onClick={updateCount} disabled={isUpdating}>
+                🤍: {post.likeCount}
+            </button>
             <h2>{post.title}</h2>
             <p>{post.description}</p>
             <p> comment </p>
