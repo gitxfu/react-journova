@@ -81,7 +81,7 @@ const EditPost = () => {
             console.error('Error updating:', error);
         } else {
             setFeedback('Post updated successfully!');
-            // Redirect to home after 2 seconds
+   
             setTimeout(() => {
                 // window.location = `/view/${id}`;
                 navigate(`/view/${id}`);

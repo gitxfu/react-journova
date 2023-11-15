@@ -38,42 +38,52 @@ const ViewPost = ({ userID }) => {
             try {
                 setLoading(true);
                 // Fetch the post
-                const { data: postData, error: postError } = await supabase
+                const { data, error } = await supabase
                     .from('Posts')
                     .select('*')
                     .eq('id', id)
                     .single();
 
-                if (postError) throw postError;
+                if (error) {
+                    throw error;
+                }
 
                 setPost({
-                    id: postData.id,
-                    title: postData.title || '',
-                    description: postData.description || '',
-                    image: postData.image || '',
-                    category: postData.category || '',
-                    likeCount: postData.like_count || 0,
+                    id: data.id,
+                    title: data.title || '',
+                    description: data.description || '',
+                    image: data.image || '',
+                    category: data.category || '',
+                    likeCount: data.like_count || 0,
                 });
+            } catch (error) {
+                setError('An error occurred while fetching the post.');
+                console.error('Error fetching posts:', error);
+            } finally {
+                setLoading(false);
+            };
+        };
 
-                // Comments should only be fetched after successfully fetching the post
-                const { data: commentsData, error: commentsError } = await supabase
+
+        const fetchComments = async () => {
+            try {
+                const { data, error } = await supabase
                     .from('Comments')
                     .select('*')
                     .eq('post_id', id)
                     .order('created_at', { ascending: true });
 
-                // console.log(commentsData)
-
-                if (commentsError) throw commentsError;
-                setComments(commentsData);
+                if (error) throw error;
+                setComments(data);
             } catch (error) {
-                setError('An error occurred while fetching the post.');
-                console.error('Error fetching:', error);
-            } finally {
-                setLoading(false);
+                setError('An error occurred while fetching the comments.');
+                console.error('Error fetching comments:', error);
             }
         };
+
         fetchPost();
+        // Comments should only be fetched after successfully fetching the post
+        fetchComments();
     }, [id]);
 
     // Function to handle changes to the comment input
@@ -83,20 +93,24 @@ const ViewPost = ({ userID }) => {
 
     const createComment = async (event) => {
         event.preventDefault();
-        const { data, error } = await supabase
-            .from('Comments')
-            .insert({
-                post_id: id,
-                user_id: userID,
-                comment_text: newComment,
-                like_count: 0
-            })
-            .select();
+        try {
+            const { error } = await supabase
+                .from('Comments')
+                .insert({
+                    post_id: id,
+                    user_id: userID,
+                    comment_text: newComment,
+                    like_count: 0
+                })
+                .select();
 
-        if (error) {
+            if (error) throw error;
+
+            setNewComment('');
+            window.location.reload(); // Reload the page to show the new comment 
+        } catch (error) {
             console.error('Error inserting comment:', error);
         }
-        setNewComment('');
     };
 
 
