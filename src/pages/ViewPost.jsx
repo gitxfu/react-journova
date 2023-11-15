@@ -3,7 +3,7 @@ import { supabase } from '../../client'
 import { useParams, Link } from 'react-router-dom';
 
 
-const ViewPost = () => {
+const ViewPost = ({ userID }) => {
     const { id } = useParams();
 
     const [post, setPost] = useState(null);
@@ -11,6 +11,7 @@ const ViewPost = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [newComment, setNewComment] = useState('');
 
     const updateCount = async () => {
         setIsUpdating(true);
@@ -61,7 +62,7 @@ const ViewPost = () => {
                     .eq('post_id', id)
                     .order('created_at', { ascending: true });
 
-                console.log(commentsData)
+                // console.log(commentsData)
 
                 if (commentsError) throw commentsError;
                 setComments(commentsData);
@@ -74,6 +75,30 @@ const ViewPost = () => {
         };
         fetchPost();
     }, [id]);
+
+    // Function to handle changes to the comment input
+    const handleInputChange = (event) => {
+        setNewComment(event.target.value);
+    };
+
+    const createComment = async (event) => {
+        event.preventDefault();
+        const { data, error } = await supabase
+            .from('Comments')
+            .insert({
+                post_id: id,
+                user_id: userID,
+                comment_text: newComment,
+                like_count: 0
+            })
+            .select();
+
+        if (error) {
+            console.error('Error inserting comment:', error);
+        }
+        setNewComment('');
+    };
+
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -90,7 +115,6 @@ const ViewPost = () => {
             <Link to={`/edit/${post.id}`}><button>Edit</button></Link>
 
             <div className="comments-section">
-                {console.log(comments)}
                 {comments.map(comment => (
                     <div key={comment.comment_id} className="comment">
                         <p>{comment.comment_text}</p>
@@ -103,6 +127,12 @@ const ViewPost = () => {
 
             </div>
             <br />
+            <form onSubmit={createComment}>
+                <textarea rows="1" cols="20" id="commentText" name="commentText" value={newComment} onChange={handleInputChange} required >
+                </textarea>
+                <button type="submit">Post Comment</button>
+            </form>
+
         </div >
     );
 };

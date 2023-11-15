@@ -20,7 +20,7 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "create", element: <CreatePost userID={userID} /> },
-        { path: "view/:id", element: <ViewPost /> },
+        { path: "view/:id", element: <ViewPost userID={userID} /> },
         { path: "edit/:id", element: <EditPost /> },
 
       ],
