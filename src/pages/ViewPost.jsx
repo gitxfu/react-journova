@@ -64,7 +64,10 @@ const ViewPost = ({ userID }) => {
             };
         };
 
+        fetchPost();
+    }, [id]);
 
+    useEffect(() => {
         const fetchComments = async () => {
             try {
                 const { data, error } = await supabase
@@ -81,10 +84,11 @@ const ViewPost = ({ userID }) => {
             }
         };
 
-        fetchPost();
-        // Comments should only be fetched after successfully fetching the post
         fetchComments();
-    }, [id]);
+    }, [id, post]); // Comments should only be fetched after successfully fetching the post
+
+
+
 
     // Function to handle changes to the comment input
     const handleInputChange = (event) => {
@@ -93,21 +97,26 @@ const ViewPost = ({ userID }) => {
 
     const createComment = async (event) => {
         event.preventDefault();
+        const newCommentObj = {
+            post_id: id,
+            user_id: userID,
+            comment_text: newComment,
+            like_count: 0
+        };
+
         try {
-            const { error } = await supabase
+            const { data, error } = await supabase
                 .from('Comments')
-                .insert({
-                    post_id: id,
-                    user_id: userID,
-                    comment_text: newComment,
-                    like_count: 0
-                })
+                .insert(newCommentObj)
                 .select();
 
             if (error) throw error;
 
+            // Update the comments state to we don't need to refresh the page to see the new comment
+            setComments(comments => [...comments, data[0]]);
+
             setNewComment('');
-            window.location.reload(); // Reload the page to show the new comment 
+
         } catch (error) {
             console.error('Error inserting comment:', error);
         }
