@@ -10,28 +10,9 @@ const ViewPost = ({ userID }) => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [isUpdatingPostLike, setIsUpdatingPostLike] = useState(false);
+    const [isUpdatingCommentLike, setIsUpdatingCommentLike] = useState(false);
     const [newComment, setNewComment] = useState('');
-
-    const updateCount = async () => {
-        setIsUpdating(true);
-
-        const newCount = post.likeCount + 1;
-        setPost((prev) => ({ ...prev, likeCount: newCount }));
-
-        const { error } = await supabase
-            .from('Posts')
-            .update({ like_count: newCount })
-            .eq('id', id)
-
-        if (error) {
-            console.error('Error updating like count:', error);
-            // Revert to the old count on error
-            setPost((prev) => ({ ...prev, likeCount: post.likeCount }));
-        }
-
-        setIsUpdating(false);
-    }
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -87,9 +68,6 @@ const ViewPost = ({ userID }) => {
         fetchComments();
     }, [id, post]); // Comments should only be fetched after successfully fetching the post
 
-
-
-
     // Function to handle changes to the comment input
     const handleInputChange = (event) => {
         setNewComment(event.target.value);
@@ -122,6 +100,52 @@ const ViewPost = ({ userID }) => {
         }
     };
 
+    const updatePostLike = async () => {
+        setIsUpdatingPostLike(true);
+
+        const newCount = post.likeCount + 1;
+        setPost((prev) => ({ ...prev, likeCount: newCount }));
+
+        const { error } = await supabase
+            .from('Posts')
+            .update({ like_count: newCount })
+            .eq('id', id)
+
+        if (error) {
+            console.error('Error updating post like count:', error);
+            // Revert to the old count on error
+            setPost((prev) => ({ ...prev, likeCount: post.likeCount }));
+        }
+
+        setIsUpdatingPostLike(false);
+    }
+
+    const updateCommentLike = async (commentId) => {
+        setIsUpdatingCommentLike(true);
+
+        const updatedComments = comments.map(comment => {
+            if (comment.comment_id === commentId) {
+                return { ...comment, like_count: comment.like_count + 1 }
+            }
+            return comment;
+        });
+
+        setComments(updatedComments);
+
+        const updatedComment = updatedComments.find(comment => comment.comment_id === commentId);
+
+        const { error } = await supabase
+            .from('Comments')
+            .update({ like_count: updatedComment.like_count })
+            .eq('comment_id', commentId)
+
+        if (error) {
+            console.error('Error updating comment like count:', error);
+        }
+
+        setIsUpdatingCommentLike(false);
+    }
+
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -130,7 +154,7 @@ const ViewPost = ({ userID }) => {
     return (
         <div>
             <img src={post.image} alt={post.title} />
-            <button className="likeButton" onClick={updateCount} disabled={isUpdating}>
+            <button className="likeButton" onClick={updatePostLike} disabled={isUpdatingPostLike}>
                 🤍: {post.likeCount}
             </button>
             <h2>{post.title}</h2>
@@ -142,7 +166,9 @@ const ViewPost = ({ userID }) => {
                     <div key={comment.comment_id} className="comment">
                         <p>{comment.comment_text}</p>
                         <span>Posted by: {comment.user_id}</span>
-                        <span>Likes: {comment.like_count}</span>
+                        <button className="likeButton" onClick={() => updateCommentLike(comment.comment_id)} disabled={isUpdatingCommentLike}>
+                            🤍: {comment.like_count}
+                        </button>
                     </div>
 
                 )
