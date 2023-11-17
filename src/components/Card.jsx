@@ -20,8 +20,6 @@ const Card = ({ id, category, timeAgo, image, title, likeCount }) => {
             <Link to={`/view/${id}`}> <h2 className="title">{title}</h2> </Link>
 
             <h2 className="likeCount">🤍 {likeCount}</h2>
-
-
         </div>
     );
 };
