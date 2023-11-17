@@ -16,6 +16,10 @@ body {
   min-height: 100vh; 
 }
 
+.app-page {
+  padding-top: 70px;
+  width: 100%;
+}
 
 .card-container {
   display: flex;

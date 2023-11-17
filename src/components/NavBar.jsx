@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { generateUserID } from '../utils/utils';
+import "./NavBar.css"
 
 const NavBar = ({ userID, setUserID }) => {
 
@@ -15,29 +16,25 @@ const NavBar = ({ userID, setUserID }) => {
   };
 
   return (
-    <nav>
+    <nav className="navbar">
       <ul>
-        <li>
+        <li className="logo">
+          <img className="logo-image" alt="logo" src="/logo.png" />
+        </li>
+        <li className="nav-item">
           <Link to="/">Home</Link>
         </li>
-        <li>
+        <li className="nav-item">
           <Link to="/create">Create</Link>
         </li>
-        <li>
-          User ID: {userID}
+        <li className="user">
+          <img className="user-image" alt="user" src="/user.png" />
+          {userID}
         </li>
-        <li>
+        {/* <li>
           <button className="changeIDButton" onClick={handleChangeID} >Change ID</button>
-        </li>
+        </li> */}
       </ul>
-      {/* <form>
-            <input
-              type="search"
-              placeholder="Search..."
-              value={searchTerm}
-            />
-            <button type="submit">Search</button>
-          </form> */}
     </nav>
   );
 };

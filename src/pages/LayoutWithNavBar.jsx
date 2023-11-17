@@ -4,7 +4,11 @@ import NavBar from '../components/NavBar';
 const LayoutWithNavBar = ({ userID, setUserID }) => (
   <>
     <NavBar userID={userID} setUserID={setUserID} />
-    <Outlet /> {/* This is where nested routes will be rendered */}
+
+    <div className="app-page">
+      <Outlet /> {/* This is where nested routes will be rendered */}
+    </div>
+
   </>
 );
 

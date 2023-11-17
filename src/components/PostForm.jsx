@@ -12,8 +12,8 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
             </textarea>
             <br />
 
-            <label htmlFor="image">Image</label><br />
-            <input type="text" id="image" name="image" value={data.image} onChange={onChange} required /><br />
+            <label htmlFor="image">Image or Video Link </label><br />
+            <input type="text" id="image" name="image" value={data.image} onChange={onChange} /><br />
             <br />
 
             <div className="mini-container">

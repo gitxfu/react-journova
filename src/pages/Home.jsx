@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../client'
 import { formatDistanceToNow } from 'date-fns';
 import Card from '../components/Card';
-
+import "./Home.css"
 const Home = () => {
 
     const [posts, setPosts] = useState([]);
@@ -72,23 +72,35 @@ const Home = () => {
 
     return (
         <>
-            <div>
-                <input
-                    name="search"
-                    type="text"
-                    placeholder="Search..."
-                    onChange={(e) => setSearchInput(e.target.value)}
-                />
-                <select onChange={(e) => setSortCriteria(e.target.value)}>
-                    <option value="created_at">Sort by Time</option>
-                    <option value="like_count">Sort by Likes</option>
-                </select>
-                <select onChange={(e) => setFilterCategory(e.target.value)}>
-                    <option value="">All Categories</option>
-                    <option value="Question">Questions</option>
-                    <option value="Blog">Blogs</option>
-                </select>
+            <div className="top-container">
+                <div className="select-container">
+                    <select onChange={(e) => setSortCriteria(e.target.value)} className="custom-select">
+                        <option value="created_at"> Sort by Time 🕒</option>
+                        <option value="like_count"> Sort by Likes ❤️</option>
+                    </select>
+
+                    <select onChange={(e) => setFilterCategory(e.target.value)} className="custom-select">
+                        <option value=""> All Categories 📷❓ </option>
+                        <option value="Blog"> Blogs 📷 </option>
+                        <option value=" Question"> Questions ❓</option>
+                    </select>
+                </div>
+
+                <div className="search-container">
+                    <div className="search-bar">
+                        <span className="search-icon">&#128269;</span>
+                        <input
+                            name="search"
+                            type="text"
+                            placeholder="Search Posts..."
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                    </div>
+                </div>
             </div>
+
+
+
             <div className="card-container">
                 {seletedPosts && seletedPosts.length > 0 ? seletedPosts.map((post) => (
                     <Card key={post.id}
