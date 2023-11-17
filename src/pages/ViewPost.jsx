@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../client'
 import { useParams, Link } from 'react-router-dom';
-
+import { isYouTubeVideo, getYouTubeEmbedURL } from '../utils/utils';
 
 const ViewPost = ({ userID }) => {
     const { id } = useParams();
@@ -153,7 +153,17 @@ const ViewPost = ({ userID }) => {
 
     return (
         <div>
-            <img src={post.image} alt={post.title} />
+            {isYouTubeVideo(post.image) ? (
+                <iframe width="500" height="300"
+                    src={getYouTubeEmbedURL(post.image)}
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={post.title}
+                    className="video"
+                ></iframe>
+            ) : (
+                <img src={post.image} alt={post.title} />
+            )}
             <button className="likeButton" onClick={updatePostLike} disabled={isUpdatingPostLike}>
                 🤍: {post.likeCount}
             </button>
