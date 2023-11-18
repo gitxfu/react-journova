@@ -4,6 +4,8 @@ import { supabase } from '../../client'
 import { formatDistanceToNow } from 'date-fns';
 import Card from '../components/Card';
 import "./Home.css"
+import LoadingAnimation from '../components/LoadingAnimation';
+
 const Home = () => {
 
     const [posts, setPosts] = useState([]);
@@ -64,7 +66,7 @@ const Home = () => {
 
     const seletedPosts = getSelectedPosts();
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingAnimation />;
     if (error) return <div>Error: {error}</div>;
     if (posts.length === 0) return <h2>{'No Post Yet 😞'}</h2>
 
@@ -82,7 +84,7 @@ const Home = () => {
                     <select onChange={(e) => setFilterCategory(e.target.value)} className="custom-select">
                         <option value=""> All Categories 📷❓ </option>
                         <option value="Blog"> Blogs 📷 </option>
-                        <option value=" Question"> Questions ❓</option>
+                        <option value="Question"> Questions ❓</option>
                     </select>
                 </div>
 

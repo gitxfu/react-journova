@@ -1,5 +1,6 @@
 #root {
-  max-width: 100%; /* Start with 100% for mobile */
+  max-width: 100%;
+  /* Start with 100% for mobile */
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -13,7 +14,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh; 
+  min-height: 100vh;
 }
 
 .app-page {
@@ -35,37 +36,92 @@ body {
   background-color: #fff;
   padding-bottom: 20px;
   box-shadow: 0 15px 25px #817c7c33;
-  border-radius: 14px;
+  border-radius: 15px;
   backdrop-filter: blur(2px);
   text-align: center;
-  width: 90%; /* Take up most of the screen width on mobile */
-  margin: 10px auto; /* Center the cards on mobile */
+  margin: 10px;
+  position: relative;
+  width: 250px;
+  height: 300px;
+  overflow: hidden;
 }
 
 .card img {
-  width: 300px; 
+  width: 100%;
   height: 100%;
-  object-fit: cover
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
+
+.card .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  /* transition: opacity 0.2s ease; */
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.card .overlay .category {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.card .overlay .likeCount {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #6DAA7F;
+}
+
+.post-form__delete-button {
+  background-color: #014421;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.post-form__delete-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 
 
 /* Media Query for Tablets and Desktops */
 @media (min-width: 768px) {
   #root {
-    max-width: 1280px; /* Set a max-width for larger screens */
-  }
-
-  h1 {
-    font-size: 60px;
-    margin-left: 50px;
+    max-width: 1280px;
+    /* Set a max-width for larger screens */
   }
 
   .card-container {
     flex-flow: row wrap;
     justify-content: space-between;
-  }
-
-  .card {
-    width: 300px; /* Fixed width for cards on larger screens */
   }
 }

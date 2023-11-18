@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../client'
 import { useParams, useNavigate } from 'react-router-dom';
 import PostForm from '../components/PostForm';
+import LoadingAnimation from '../components/LoadingAnimation';
 
 const EditPost = () => {
 
@@ -81,7 +82,7 @@ const EditPost = () => {
             console.error('Error updating:', error);
         } else {
             setFeedback('Post updated successfully!');
-   
+
             setTimeout(() => {
                 // window.location = `/view/${id}`;
                 navigate(`/view/${id}`);
@@ -116,14 +117,15 @@ const EditPost = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingAnimation />;
 
     return (
         <div>
-            <h1> Edit post </h1>
+            <h3> Edit or delete a post </h3>
             <div className='form-container'>
                 <PostForm data={post} onChange={handleInputChange} onSubmit={updatePost} error={error} />
-                <button className="deleteButton" onClick={deletePost} disabled={!!error}>Delete</button>
+                <br />
+                <button className="post-form__delete-button" onClick={deletePost} disabled={!!error}>Delete</button>
             </div>
 
 

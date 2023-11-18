@@ -1,0 +1,139 @@
+.detail-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1024px;
+    margin: auto;
+}
+
+.media-container {
+    flex: 1;
+    max-width: 100%;
+    padding: 20px;
+}
+
+.video,
+.post-image {
+    width: 100%;
+    height: auto;
+}
+
+.content-container {
+    flex: 1;
+    max-width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-title {
+    margin: 10px 0;
+}
+
+.post-description {
+    margin-bottom: 20px;
+}
+
+.edit-link {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.edit-button {
+    background-color: #014421;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.comments-section {
+    margin-top: 20px;
+}
+
+.comment-title {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.comment {
+    background-color: rgba(226, 241, 231, 0.2);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.comment-user {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.likeButton {
+    background-color: rgba(109, 170, 127, 0);
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 10px;
+    font-size: 0.8em;
+}
+
+.comment-text {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+
+.comment-divider {
+    border: none;
+    height: 1px;
+    background-color: #6DAA7F;
+    margin: 20px 0;
+}
+
+.post-like {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.post-like h3 {
+    margin: 0;
+    color: #6DAA7F;
+}
+
+.post-like-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    align-self: flex-end;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.comment-textarea {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.post-comment-button {
+    align-self: flex-end;
+}

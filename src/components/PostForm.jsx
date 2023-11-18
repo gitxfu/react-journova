@@ -34,6 +34,7 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
                     value={data.title}
                     onChange={onChange}
                     className="post-form__input"
+                    placeholder="Required"
                     required
                 />
             </div>
@@ -48,6 +49,7 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
                     value={data.description}
                     onChange={onChange}
                     className="post-form__textarea"
+                    placeholder="Required"
                     required
                 />
             </div>
@@ -61,6 +63,7 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
                     value={data.image}
                     onChange={onChange}
                     className="post-form__input"
+                    placeholder="Optional"
                 />
             </div>
 
@@ -73,8 +76,10 @@ const PostForm = ({ data, onChange, onSubmit, error }) => {
                     value={data.secretKey}
                     onChange={onChange}
                     className="post-form__input"
+                    placeholder="Required"
                     required
                 />
+                <p>  You can only edit and delete the post by entering the secret key established during the post's creation. </p>
             </div>
 
             <input type="submit" value="Save" disabled={!!error} className="post-form__submit-button" />

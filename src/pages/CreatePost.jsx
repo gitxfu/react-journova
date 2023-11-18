@@ -53,7 +53,7 @@ const CreatePost = ({ userID }) => {
 
     return (
         <div>
-            <h1> Create a new post </h1>
+            <h3> Create a new post </h3>
             <div className='form-container'>
                 <PostForm data={post} onChange={handleInputChange} onSubmit={createPost} />
             </div>

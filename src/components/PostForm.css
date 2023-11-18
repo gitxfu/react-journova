@@ -1,11 +1,11 @@
-.post-form {
+/* .post-form {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #6DAA7F;
-}
+} */
 
 .post-form__category {
     margin-bottom: 20px;
@@ -36,7 +36,6 @@
     padding: 0px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 20px;
 }
 
 .post-form__submit-button {

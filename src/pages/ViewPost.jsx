@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../client'
 import { useParams, Link } from 'react-router-dom';
 import { isYouTubeVideo, getYouTubeEmbedURL } from '../utils/utils';
+import "./ViewPost.css"
+import LoadingAnimation from '../components/LoadingAnimation';
 
 const ViewPost = ({ userID }) => {
     const { id } = useParams();
@@ -13,6 +15,12 @@ const ViewPost = ({ userID }) => {
     const [isUpdatingPostLike, setIsUpdatingPostLike] = useState(false);
     const [isUpdatingCommentLike, setIsUpdatingCommentLike] = useState(false);
     const [newComment, setNewComment] = useState('');
+
+    const handleImageError = (e) => {
+        e.target.src = '../Journova.png';
+        // './Journova.png' didn't work because http://localhost:5173/view/Journova.png 
+    };
+
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -146,53 +154,66 @@ const ViewPost = ({ userID }) => {
         setIsUpdatingCommentLike(false);
     }
 
-
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingAnimation />;
     if (error) return <div>Error: {error}</div>;
     if (!post) return <div>Post not found.</div>;
 
     return (
-        <div>
-            {isYouTubeVideo(post.image) ? (
-                <iframe width="500" height="300"
-                    src={getYouTubeEmbedURL(post.image)}
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title={post.title}
-                    className="video"
-                ></iframe>
-            ) : (
-                <img src={post.image} alt={post.title} />
-            )}
-            <button className="likeButton" onClick={updatePostLike} disabled={isUpdatingPostLike}>
-                🤍: {post.likeCount}
-            </button>
-            <h2>{post.title}</h2>
-            <p>{post.description}</p>
-            <Link to={`/edit/${post.id}`}><button>Edit</button></Link>
-
-            <div className="comments-section">
-                {comments.map(comment => (
-                    <div key={comment.comment_id} className="comment">
-                        <p>{comment.comment_text}</p>
-                        <span>Posted by: {comment.user_id}</span>
-                        <button className="likeButton" onClick={() => updateCommentLike(comment.comment_id)} disabled={isUpdatingCommentLike}>
-                            🤍: {comment.like_count}
-                        </button>
-                    </div>
-
-                )
+        <div className='detail-page'>
+            <div className="media-container">
+                {isYouTubeVideo(post.image) ? (
+                    <iframe
+                        src={getYouTubeEmbedURL(post.image)}
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={post.title}
+                        className="video"
+                    ></iframe>
+                ) : (
+                    <img src={post.image} alt={post.title} onError={handleImageError} className="post-image" />
                 )}
-
             </div>
-            <br />
-            <form onSubmit={createComment}>
-                <textarea rows="1" cols="20" id="commentText" name="commentText" value={newComment} onChange={handleInputChange} required >
-                </textarea>
-                <button type="submit">Post Comment</button>
-            </form>
 
-        </div >
+            <div className="content-container">
+                <h2 className="post-title">{post.title}</h2>
+                <p className="post-description">{post.description}</p>
+                <Link to={`/edit/${post.id}`} className="edit-link"><button className="edit-button"> Edit Post </button></Link>
+                <div className="comments-section">
+                    <h3 className="comment-title"> Comments </h3>
+                    {comments.map(comment => (
+                        <div key={comment.comment_id} className="comment">
+                            <span className="comment-user"> {comment.user_id}</span>
+                            <p className="comment-text">{comment.comment_text}</p>
+                            <button className="likeButton" onClick={() => updateCommentLike(comment.comment_id)} disabled={isUpdatingCommentLike}>
+                                🤍 {comment.like_count}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                <hr className="comment-divider" />
+
+                <div className="post-like">
+                    <h3> What do you think? </h3>
+                    <button className="post-like-button" onClick={updatePostLike} disabled={isUpdatingPostLike}>
+                        🤍 {post.likeCount}
+                    </button>
+                </div>
+
+                <form onSubmit={createComment} className="comment-form">
+                    <textarea
+                        id="commentText"
+                        name="commentText"
+                        className="comment-textarea"
+                        value={newComment}
+                        placeholder="Add a comment ..."
+                        onChange={handleInputChange}
+                        required
+                    ></textarea>
+                    <button type="submit" className="post-comment-button">Post Comment</button>
+                </form>
+            </div>
+        </div>
     );
 };
 
