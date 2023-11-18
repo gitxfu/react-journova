@@ -12,10 +12,15 @@
     padding: 20px;
 }
 
-.video,
 .post-image {
     width: 100%;
     height: auto;
+}
+
+.video {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
 }
 
 .content-container {
